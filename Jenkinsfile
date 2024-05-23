@@ -4,7 +4,7 @@ pipeline {
                 choice(name: 'deploy_choice', choices:['apply','destroy'],description:'The deployment type')
                   }
     environment {
-        EMAIL_TO = 'fusisoft@gmail.com'
+        EMAIL_TO = 'irhuepearl@gmail.com'
     }
     stages {
         stage('1.Terraform init') {
@@ -16,7 +16,7 @@ pipeline {
         stage('2.Terraform plan') {
             steps {
                 echo 'terraform plan phase'
-                sh 'AWS_REGION=us-west-2 terraform plan'
+                sh 'AWS_REGION=us-westeast-1 terraform plan'
             }
         }
         stage('3.Manual Approval') {
@@ -34,18 +34,18 @@ pipeline {
         stage('4.Terraform Deploy') {              
             steps { 
                 echo 'Terraform ${params.deploy_choice} phase'  
-                sh "AWS_REGION=us-west-2 terraform ${params.deploy_choice}  -target=module.vpc -target=module.eks --auto-approve"
-                sh "aws eks --region us-west-2 update-kubeconfig --name dominion-cluster && export KUBE_CONFIG_PATH=~/.kube/config"
-                sh "AWS_REGION=us-west-2 terraform ${params.deploy_choice} --auto-approve"
+                sh "AWS_REGION=us-east-1 terraform ${params.deploy_choice}  -target=module.vpc -target=module.eks --auto-approve"
+                sh "aws eks --region us-east-1 update-kubeconfig --name dominion-cluster && export KUBE_CONFIG_PATH=~/.kube/config"
+                sh "AWS_REGION=us-east-1 terraform ${params.deploy_choice} --auto-approve"
             }
                 }
         stage ('5. Email Notification') {
             steps {
-               mail bcc: 'fusisoft@gmail.com', body: '''Terraform deployment is completed.
+               mail bcc: 'irhuepearl@gmail.com', body: '''Terraform deployment is completed.
                Let me know if the changes look okay.
                Thanks,
                Dominion System Technologies,
-              +1 (313) 413-1477''', cc: 'fusisoft@gmail.com', from: '', replyTo: '', subject: 'Terraform Infra deployment completed!!!', to: 'fusisoft@gmail.com'
+              +233 (050) 193-4917''', cc: 'irhuepearl@gmail.com', from: '', replyTo: '', subject: 'Terraform Infra deployment completed!!!', to: 'irhuepearl@gmail.com'
                           
                }    
           }
